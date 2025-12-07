@@ -1,0 +1,125 @@
+<div class="accessibility-settings">
+  <div class="accessibility-settings__header">
+    <h2 class="accessibility-settings__title" id="accessibility-menu-title">
+      Ustawienia dostępności
+    </h2>
+    <button
+      type="button"
+      class="accessibility-settings__close"
+      (click)="onClose()"
+      aria-label="Zamknij ustawienia dostępności"
+    >
+      ×
+    </button>
+  </div>
+
+  <div class="accessibility-settings__content">
+    <div class="accessibility-settings__section">
+      <h3 class="accessibility-settings__section-title">Rozmiar czcionki</h3>
+      <div class="accessibility-settings__options">
+        <label class="accessibility-settings__radio">
+          <input
+            type="radio"
+            name="fontSize"
+            [checked]="store.fontSize() === 'normal'"
+            (change)="onFontSizeChange('normal')"
+          />
+          <span>Standardowy</span>
+        </label>
+        <label class="accessibility-settings__radio">
+          <input
+            type="radio"
+            name="fontSize"
+            [checked]="store.fontSize() === 'large'"
+            (change)="onFontSizeChange('large')"
+          />
+          <span>Duży</span>
+        </label>
+        <label class="accessibility-settings__radio">
+          <input
+            type="radio"
+            name="fontSize"
+            [checked]="store.fontSize() === 'extra-large'"
+            (change)="onFontSizeChange('extra-large')"
+          />
+          <span>Bardzo duży</span>
+        </label>
+      </div>
+    </div>
+
+    <div class="accessibility-settings__section">
+      <h3 class="accessibility-settings__section-title">Kontrast</h3>
+      <label class="accessibility-settings__checkbox">
+        <input
+          type="checkbox"
+          [checked]="store.highContrast()"
+          (change)="onHighContrastChange($any($event.target).checked)"
+        />
+        <span>Wysoki kontrast</span>
+      </label>
+    </div>
+
+    <div class="accessibility-settings__section">
+      <h3 class="accessibility-settings__section-title">Animacje</h3>
+      <label class="accessibility-settings__checkbox">
+        <input
+          type="checkbox"
+          [checked]="store.reducedMotion()"
+          (change)="onReducedMotionChange($any($event.target).checked)"
+        />
+        <span>Ogranicz animacje</span>
+      </label>
+    </div>
+
+    <div class="accessibility-settings__section">
+      <h3 class="accessibility-settings__section-title">Schemat kolorów</h3>
+      <div class="accessibility-settings__options">
+        <label class="accessibility-settings__radio">
+          <input
+            type="radio"
+            name="colorScheme"
+            [checked]="store.colorScheme() === 'auto'"
+            (change)="onColorSchemeChange('auto')"
+          />
+          <span>Automatyczny</span>
+        </label>
+        <label class="accessibility-settings__radio">
+          <input
+            type="radio"
+            name="colorScheme"
+            [checked]="store.colorScheme() === 'light'"
+            (change)="onColorSchemeChange('light')"
+          />
+          <span>Jasny</span>
+        </label>
+        <label class="accessibility-settings__radio">
+          <input
+            type="radio"
+            name="colorScheme"
+            [checked]="store.colorScheme() === 'dark'"
+            (change)="onColorSchemeChange('dark')"
+          />
+          <span>Ciemny</span>
+        </label>
+      </div>
+    </div>
+
+    <div class="accessibility-settings__actions">
+      <button
+        type="button"
+        class="accessibility-settings__button accessibility-settings__button--secondary"
+        (click)="onReset()"
+      >
+        Przywróć domyślne
+      </button>
+      <button
+        type="button"
+        class="accessibility-settings__button accessibility-settings__button--primary"
+        (click)="onClose()"
+      >
+        Zamknij
+      </button>
+    </div>
+  </div>
+</div>
+

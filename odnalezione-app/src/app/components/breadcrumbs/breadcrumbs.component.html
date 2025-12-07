@@ -1,0 +1,19 @@
+<nav class="breadcrumbs" aria-label="Nawigacja okruszkowa">
+  <ol class="breadcrumbs__list">
+    Jesteś w sekcji: 
+    @for (item of items; track item.label; let isLast = $last) {
+      <li class="breadcrumbs__item">
+        @if (isLast) {
+          <span class="breadcrumbs__current" aria-current="page">{{ item.label }}</span>
+        } @else {
+          @if (item.route) {
+            <a [routerLink]="item.route" class="breadcrumbs__link">{{ item.label }}</a>
+          } @else {
+            <span class="breadcrumbs__text">{{ item.label }}</span>
+          }
+        }
+      </li>
+    }
+  </ol>
+</nav>
+

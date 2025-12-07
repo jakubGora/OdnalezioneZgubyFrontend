@@ -1,0 +1,590 @@
+/* Globalne style zgodne z WCAG 2.2 i standardami rządowymi */
+
+/* Reset i podstawowe style */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* Ensure proper rendering */
+html {
+  -webkit-text-size-adjust: 100%;
+  -ms-text-size-adjust: 100%;
+}
+
+html {
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  line-height: 1.5;
+  color: #000000;
+  background-color: #F9F9F9;
+}
+
+/* Typography - zgodne z WCAG 2.2 */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0 0 1rem 0;
+  font-weight: 700;
+  line-height: 1.2;
+  color: #000000;
+}
+
+h1 {
+  font-size: 2rem;
+}
+
+h2 {
+  font-size: 1.75rem;
+}
+
+h3 {
+  font-size: 1.5rem;
+}
+
+h4 {
+  font-size: 1.25rem;
+}
+
+h5 {
+  font-size: 1.125rem;
+}
+
+h6 {
+  font-size: 1rem;
+}
+
+p {
+  margin: 0 0 1rem 0;
+}
+
+a {
+  color: #005ea5;
+  text-decoration: underline;
+
+  &:hover {
+    color: #004080;
+    text-decoration: none;
+  }
+
+  &:focus {
+    outline: 3px solid #005ea5;
+    outline-offset: 2px;
+    text-decoration: none;
+  }
+}
+
+/* Formularze - style zgodne z formularzami rządowymi */
+.form {
+  font-family: 'Roboto', sans-serif;
+
+  &__group {
+    margin-bottom: 1.5rem;
+  }
+
+  &__label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 600;
+    font-style: normal;
+    font-size: 0.75rem;
+    line-height: 100%;
+    letter-spacing: 0%;
+    color: #565656;
+
+    &--required::after {
+      content: ' *';
+      color: #d4351c;
+      font-weight: 700;
+    }
+  }
+
+  &__hint {
+    display: block;
+    margin-top: 0.25rem;
+    font-size: 0.875rem;
+    font-family: 'Roboto', sans-serif;
+    color: #505a5f;
+  }
+
+  &__input,
+  &__textarea,
+  &__select {
+    width: 100%;
+    max-width: 350px;
+    padding: 0.75rem;
+    border: 2px solid #EEEEEE;
+    border-radius: 4px;
+    font-size: 1rem;
+    font-family: 'Roboto', sans-serif;
+    line-height: 1.5;
+    color: #565656;
+    background-color: #ffffff;
+    transition: border-color 0.2s ease;
+
+    &[type="date"] {
+      max-width: 232px;
+    }
+
+    &::placeholder {
+      font-family: 'Roboto', sans-serif;
+      font-weight: 400;
+      font-style: normal;
+      font-size: 0.875rem;
+      line-height: 100%;
+      letter-spacing: 0%;
+      opacity: 1;
+    }
+
+    &:hover {
+      border-color: #e6e6e6;
+    }
+
+    &:focus {
+      outline: 3px solid #005ea5;
+      outline-offset: 0;
+      border-color: #005ea5;
+    }
+
+    &:disabled {
+      background-color: #f3f2f1;
+      border-color: #b1b4b6;
+      color: #8F8F8F;
+      cursor: not-allowed;
+    }
+
+    &--error {
+      border-color: #d4351c;
+
+      &:focus {
+        outline-color: #d4351c;
+        border-color: #d4351c;
+      }
+    }
+  }
+
+  &__textarea {
+    min-height: 120px;
+    resize: vertical;
+  }
+
+  &__error {
+    display: block;
+    margin-top: 0.5rem;
+    color: #d4351c;
+    font-size: 0.875rem;
+    font-weight: 600;
+    font-family: 'Roboto', sans-serif;
+  }
+
+  &__checkbox,
+  &__radio {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+    margin-bottom: 0.75rem;
+    cursor: pointer;
+
+    input[type="checkbox"],
+    input[type="radio"] {
+      width: 1.5rem;
+      height: 1.5rem;
+      margin: 0;
+      cursor: pointer;
+      flex-shrink: 0;
+      margin-top: 0.125rem;
+
+      &:focus {
+        outline: 3px solid #005ea5;
+        outline-offset: 2px;
+      }
+    }
+
+    label {
+      cursor: pointer;
+      user-select: none;
+      font-family: 'Roboto', sans-serif;
+    }
+  }
+
+  &__button {
+    padding: 0.75rem 1.5rem;
+    border: 2px solid;
+    border-radius: 4px;
+    font-size: 1rem;
+    font-weight: 600;
+    font-family: 'Roboto', sans-serif;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-decoration: none;
+    display: inline-block;
+    text-align: center;
+
+    &--primary {
+      background-color: #005ea5;
+      border-color: #005ea5;
+      color: #ffffff;
+
+      &:hover {
+        background-color: #004080;
+        border-color: #004080;
+        color: #ffffff;
+      }
+
+      &:focus {
+        outline: 3px solid #005ea5;
+        outline-offset: 2px;
+      }
+
+      &:active {
+        background-color: #003366;
+        border-color: #003366;
+      }
+
+      &:disabled {
+        background-color: #b1b4b6;
+        border-color: #b1b4b6;
+        color: #ffffff;
+        cursor: not-allowed;
+      }
+    }
+
+    &--secondary {
+      background-color: #ffffff;
+      border-color: #005ea5;
+      color: #005ea5;
+
+      &:hover {
+        background-color: #f3f2f1;
+      }
+
+      &:focus {
+        outline: 3px solid #005ea5;
+        outline-offset: 2px;
+      }
+
+      &:active {
+        background-color: #e5e5e5;
+      }
+
+      &:disabled {
+        background-color: #f3f2f1;
+        border-color: #b1b4b6;
+        color: #505a5f;
+        cursor: not-allowed;
+      }
+    }
+  }
+
+  &__button-group {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-top: 2rem;
+  }
+}
+
+/* Utility classes */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 0;
+  background: #005ea5;
+  color: #ffffff;
+  padding: 0.75rem 1rem;
+  text-decoration: none;
+  z-index: 10000;
+
+  &:focus {
+    top: 0;
+    outline: 3px solid #ffffff;
+    outline-offset: 2px;
+  }
+}
+
+/* High contrast modes */
+body.black-white,
+html.black-white,
+.black-white {
+  background-color: #000000 !important;
+  color: #ffffff !important;
+
+  *,
+  *::before,
+  *::after {
+    background-color: #000000 !important;
+    color: #ffffff !important;
+    border-color: #ffffff !important;
+  }
+
+  a,
+  a:link,
+  a:visited {
+    color: #ffffff !important;
+    text-decoration: underline !important;
+    border-color: #ffffff !important;
+  }
+
+  a:focus,
+  a:focus-visible {
+    outline: 3px solid #ffff00 !important;
+    outline-offset: 2px !important;
+  }
+
+  button,
+  .btn,
+  .form__button,
+  input[type="button"],
+  input[type="submit"] {
+    border: 2px solid #ffffff !important;
+    background-color: #000000 !important;
+    color: #ffffff !important;
+  }
+
+  button.btn-primary,
+  .btn.btn-primary,
+  .btn--primary,
+  .form__button--primary {
+    background-color: #ffffff !important;
+    color: #000000 !important;
+    border-color: #ffffff !important;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    color: #ffffff !important;
+  }
+
+  input,
+  textarea,
+  select {
+    background-color: #000000 !important;
+    color: #ffffff !important;
+    border-color: #ffffff !important;
+  }
+}
+
+body.black-yellow,
+html.black-yellow,
+.black-yellow {
+  background-color: #000000 !important;
+  color: #ffff00 !important;
+
+  *,
+  *::before,
+  *::after {
+    background-color: #000000 !important;
+    color: #ffff00 !important;
+    border-color: #ffff00 !important;
+  }
+
+  a,
+  a:link,
+  a:visited {
+    color: #ffff00 !important;
+    text-decoration: underline !important;
+    border-color: #ffff00 !important;
+  }
+
+  a:focus,
+  a:focus-visible {
+    outline: 3px solid #ffffff !important;
+    outline-offset: 2px !important;
+  }
+
+  button,
+  .btn,
+  .form__button,
+  input[type="button"],
+  input[type="submit"] {
+    border: 2px solid #ffff00 !important;
+    background-color: #000000 !important;
+    color: #ffff00 !important;
+  }
+
+  button.btn-primary,
+  .btn.btn-primary,
+  .btn--primary,
+  .form__button--primary {
+    background-color: #ffff00 !important;
+    color: #000000 !important;
+    border-color: #ffff00 !important;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    color: #ffff00 !important;
+  }
+
+  input,
+  textarea,
+  select {
+    background-color: #000000 !important;
+    color: #ffff00 !important;
+    border-color: #ffff00 !important;
+  }
+}
+
+body.yellow-black,
+html.yellow-black,
+.yellow-black {
+  background-color: #ffff00 !important;
+  color: #000000 !important;
+
+  *,
+  *::before,
+  *::after {
+    background-color: #ffff00 !important;
+    color: #000000 !important;
+    border-color: #000000 !important;
+  }
+
+  a,
+  a:link,
+  a:visited {
+    color: #000000 !important;
+    text-decoration: underline !important;
+    border-color: #000000 !important;
+  }
+
+  a:focus,
+  a:focus-visible {
+    outline: 3px solid #0000ff !important;
+    outline-offset: 2px !important;
+  }
+
+  button,
+  .btn,
+  .form__button,
+  input[type="button"],
+  input[type="submit"] {
+    border: 2px solid #000000 !important;
+    background-color: #ffff00 !important;
+    color: #000000 !important;
+  }
+
+  button.btn-primary,
+  .btn.btn-primary,
+  .btn--primary,
+  .form__button--primary {
+    background-color: #000000 !important;
+    color: #ffff00 !important;
+    border-color: #000000 !important;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    color: #000000 !important;
+  }
+
+  input,
+  textarea,
+  select {
+    background-color: #ffff00 !important;
+    color: #000000 !important;
+    border-color: #000000 !important;
+  }
+}
+
+/* Legacy high contrast mode for backward compatibility */
+.high-contrast {
+  * {
+    background-color: #ffffff !important;
+    color: #000000 !important;
+    border-color: #000000 !important;
+  }
+
+  a {
+    color: #0000ff !important;
+    text-decoration: underline !important;
+
+    &:visited {
+      color: #800080 !important;
+    }
+
+    &:focus {
+      outline: 3px solid #ffff00 !important;
+      outline-offset: 2px !important;
+    }
+  }
+
+  button,
+  .form__button {
+    border: 2px solid #000000 !important;
+
+    &--primary {
+      background-color: #000000 !important;
+      color: #ffffff !important;
+      border-color: #000000 !important;
+    }
+  }
+}
+
+/* Font size adjustments */
+.font-size--large {
+  html {
+    font-size: 18px;
+  }
+}
+
+.font-size--extra-large {
+  html {
+    font-size: 20px;
+  }
+}
+
+/* Reduced motion */
+.reduced-motion,
+.reduced-motion * {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+  scroll-behavior: auto !important;
+}
+
+/* Focus styles - WCAG 2.2 compliant */
+*:focus-visible {
+  outline: 3px solid #005ea5;
+  outline-offset: 2px;
+}
+
+/* Skip to main content link */
+.skip-to-main {
+  position: absolute;
+  top: -100px;
+  left: 0;
+  background: #005ea5;
+  color: #ffffff;
+  padding: 0.75rem 1rem;
+  text-decoration: none;
+  z-index: 10000;
+
+  &:focus {
+    top: 0;
+    outline: 3px solid #ffffff;
+    outline-offset: 2px;
+  }
+}

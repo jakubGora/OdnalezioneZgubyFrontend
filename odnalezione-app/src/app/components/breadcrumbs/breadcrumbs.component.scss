@@ -1,0 +1,141 @@
+.breadcrumbs {
+  width: 100%;
+  background-color: #ffffff;
+  border-top: 1px solid #F5F5F5;
+  border-bottom: 1px solid #F5F5F5;
+
+  &__list {
+    display: flex;
+    flex-wrap: wrap;
+    list-style: none;
+    margin: 0;
+    align-items: center;
+    max-width: 1200px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 1rem;
+    font-family: 'Roboto', sans-serif;
+    font-size: 0.71875rem;
+    font-weight: 700;
+    font-style: normal;
+    line-height: 100%;
+    letter-spacing: 0%;
+    color: #565656;
+  }
+
+  &__item {
+    display: flex;
+    align-items: center;
+
+    &:first-child {
+      margin-left: 0.5rem;
+    }
+
+    &:not(:last-child)::after {
+      content: '/';
+      margin-left: 0.5rem;
+      margin-right: 0.5rem;
+      color: #565656;
+    }
+  }
+
+  &__link {
+    text-decoration: none;
+
+    &:hover {
+      color: #004080;
+    }
+
+    &:focus {
+      outline: 3px solid #005ea5;
+      outline-offset: 2px;
+    }
+  }
+
+}
+
+// High contrast modes
+body.black-white,
+html.black-white,
+.black-white {
+  .breadcrumbs {
+    background-color: #000000 !important;
+    border-top: 1px solid #ffffff !important;
+    border-bottom: 1px solid #ffffff !important;
+
+    &__item::after {
+      color: #ffffff;
+    }
+
+    &__link {
+      color: #ffffff;
+      text-decoration: none;
+
+      &:focus {
+        outline-color: #ffff00;
+      }
+    }
+
+    &__text,
+    &__current {
+      color: #ffffff;
+    }
+  }
+}
+
+body.black-yellow,
+html.black-yellow,
+.black-yellow {
+  .breadcrumbs {
+    background-color: #000000 !important;
+    border-top: 1px solid #ffff00 !important;
+    border-bottom: 1px solid #ffff00 !important;
+
+    &__item::after {
+      color: #ffff00;
+    }
+
+    &__link {
+      color: #ffff00;
+      text-decoration: none;
+
+      &:focus {
+        outline-color: #ffffff;
+      }
+    }
+
+    &__text,
+    &__current {
+      color: #ffff00;
+    }
+  }
+}
+
+body.yellow-black,
+html.yellow-black,
+.yellow-black {
+  .breadcrumbs {
+    background-color: #ffff00 !important;
+    border-top: 1px solid #000000 !important;
+    border-bottom: 1px solid #000000 !important;
+
+    &__item::after {
+      color: #000000;
+    }
+
+    &__link {
+      color: #000000;
+      text-decoration: none;
+
+      &:focus {
+        outline-color: #0000ff;
+      }
+    }
+
+    &__text,
+    &__current {
+      color: #000000;
+    }
+  }
+}
+

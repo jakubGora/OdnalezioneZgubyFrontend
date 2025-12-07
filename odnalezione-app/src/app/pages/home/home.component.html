@@ -1,0 +1,331 @@
+<div class="home">
+  <h1 class="home__title">Rejestr rzeczy znalezionych</h1>
+
+  <div class="home__actions">
+    <a routerLink="/dodaj-przedmiot" class="home__action-card home__action-card--primary">
+      <div class="home__action-icon">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="12" y1="5" x2="12" y2="19"></line>
+          <line x1="5" y1="12" x2="19" y2="12"></line>
+        </svg>
+      </div>
+      <span class="home__action-text">Dodaj przedmiot ręcznie</span>
+    </a>
+
+    <a routerLink="/importuj-plik" class="home__action-card home__action-card--secondary">
+      <div class="home__action-icon home__action-icon--secondary">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+          <polyline points="14 2 14 8 20 8"></polyline>
+          <!-- Plus w prawym górnym rogu -->
+          <circle cx="18" cy="6" r="3" fill="currentColor"></circle>
+          <line x1="18" y1="4" x2="18" y2="8" stroke="white" stroke-width="1.5"></line>
+          <line x1="16" y1="6" x2="20" y2="6" stroke="white" stroke-width="1.5"></line>
+        </svg>
+      </div>
+      <span class="home__action-text">Wgraj plik z listą przedmiotów</span>
+    </a>
+  </div>
+
+  <div class="home__drafts">
+    <h2 class="home__drafts-title">Twoje nieopublikowane szkice</h2>
+    @if (drafts.length === 0) {
+      <p class="home__drafts-empty">Brak zapisanych szkiców</p>
+    } @else {
+      <ul class="home__drafts-list">
+        @for (draft of drafts; track draft.fileName) {
+          <li class="home__drafts-item">
+            <span class="home__drafts-info">
+              {{ draft.fileName }} - ostatnia modyfikacja {{ draft.lastModified }}
+            </span>
+            <a 
+              [routerLink]="['/importuj-plik/weryfikuj', encodeURIComponent(draft.fileNameWithoutExtension)]" 
+              class="home__drafts-link"
+            >
+              Przejdź do edycji
+            </a>
+          </li>
+        }
+      </ul>
+    }
+  </div>
+
+  <div class="home__browse">
+    <h2 class="home__browse-title">Przeglądaj bazę rzeczy znalezionych</h2>
+    
+    <div class="home__browse-controls">
+      <div class="home__search-wrapper">
+        <input
+          type="text"
+          class="home__search-input"
+          [(ngModel)]="searchQuery"
+          (ngModelChange)="onSearchChange()"
+          placeholder="Wyszukaj dane..."
+        />
+        <button
+          type="button"
+          class="home__search-button"
+          (click)="onSearchChange()"
+          aria-label="Szukaj"
+        >
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8"></circle>
+            <path d="m21 21-4.35-4.35"></path>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <div class="home__table-wrapper">
+      @if (isLoading) {
+        <p class="home__loading">Ładowanie danych...</p>
+      } @else if (filteredItems.length === 0) {
+        <p class="home__empty">Brak wyników</p>
+      } @else {
+        <table class="home__table">
+          <thead>
+            <tr>
+              <th class="home__th home__th--checkbox">
+                <input
+                  type="checkbox"
+                  class="home__checkbox"
+                  [checked]="isAllSelected()"
+                  (change)="toggleAllItems()"
+                  aria-label="Zaznacz wszystkie"
+                />
+              </th>
+              <th class="home__th">ID:</th>
+              <th class="home__th">Nazwa</th>
+              <th class="home__th">Kolor</th>
+              <th class="home__th">Opis ogólny</th>
+              <th class="home__th">
+                <button
+                  type="button"
+                  class="home__th-sort-button"
+                  (click)="onSortChange('foundDate')"
+                >
+                  Data znalezienia
+                  <span class="home__sort-icon">{{ getSortIcon('foundDate') }}</span>
+                </button>
+              </th>
+              <th class="home__th">Miejsce znalezienia</th>
+              <th class="home__th">Termin odbioru</th>
+              <th class="home__th">ID miejsca</th>
+              <th class="home__th">
+                <button
+                  type="button"
+                  class="home__th-sort-button"
+                  (click)="onSortChange('status')"
+                >
+                  Status
+                  <span class="home__sort-icon">{{ getSortIcon('status') }}</span>
+                </button>
+              </th>
+              <th class="home__th">Akcje</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (item of filteredItems; track item.id) {
+              <tr class="home__row">
+                <td class="home__td home__td--checkbox">
+                  <input
+                    type="checkbox"
+                    class="home__checkbox"
+                    [checked]="isItemSelected(item.id)"
+                    (change)="toggleItemSelection(item.id)"
+                    [attr.aria-label]="'Zaznacz przedmiot ' + item.id"
+                  />
+                </td>
+                <td class="home__td">{{ item.id }}</td>
+                <td class="home__td">{{ item.name || '-' }}</td>
+                <td class="home__td">{{ item.itemColor || '-' }}</td>
+                <td class="home__td">{{ item.additionalInfo || '-' }}</td>
+                <td class="home__td">{{ formatDisplayDate(item.foundDate) }}</td>
+                <td class="home__td">{{ item.location }}{{ item.foundPlace ? ', ' + item.foundPlace : '' }}</td>
+                <td class="home__td">{{ formatDisplayDate(item.notificationDate) }}</td>
+                <td class="home__td">{{ item.warehousePlace || '-' }}</td>
+                <td class="home__td">
+                  <span
+                    class="home__status-badge"
+                    [class.home__status-badge--do-odbioru]="getItemStatus(item) === 'do-odbioru'"
+                    [class.home__status-badge--wydano]="getItemStatus(item) === 'wydano'"
+                    [class.home__status-badge--uplynal-termin]="getItemStatus(item) === 'uplynal-termin'"
+                  >
+                    {{ getStatusText(getItemStatus(item)) }}
+                  </span>
+                </td>
+                <td class="home__td">
+                  <a
+                    href="#"
+                    class="home__action-link"
+                    (click)="openEditModal(item); $event.preventDefault()"
+                  >
+                    Edytuj/Usuń
+                  </a>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      }
+    </div>
+  </div>
+
+  <!-- Modal do edycji/usuwania przedmiotu -->
+  @if (isModalOpen) {
+    <div class="home__modal-overlay" (click)="closeModal()">
+      <div class="home__modal" (click)="$event.stopPropagation()">
+        <div class="home__modal-header">
+          <h2 class="home__modal-title">Edytuj przedmiot</h2>
+          <button
+            type="button"
+            class="home__modal-close"
+            (click)="closeModal()"
+            aria-label="Zamknij"
+          >
+            ×
+          </button>
+        </div>
+
+        <div class="home__modal-body">
+          <form class="form" (ngSubmit)="saveItem()">
+            <div class="form__group">
+              <label for="edit-name" class="form__label form__label--required">
+                Rodzaj przedmiotu
+              </label>
+              <input
+                type="text"
+                id="edit-name"
+                class="form__input"
+                [(ngModel)]="editedData.name"
+                name="name"
+                required
+              />
+            </div>
+
+            <div class="form__group">
+              <label for="edit-itemColor" class="form__label">
+                Kolor przedmiotu (opcjonalnie)
+              </label>
+              <input
+                type="text"
+                id="edit-itemColor"
+                class="form__input"
+                [(ngModel)]="editedData.itemColor"
+                name="itemColor"
+              />
+            </div>
+
+            <div class="form__group">
+              <label for="edit-additionalInfo" class="form__label">
+                Dodatkowe informacje (opcjonalnie)
+              </label>
+              <textarea
+                id="edit-additionalInfo"
+                class="form__textarea"
+                [(ngModel)]="editedData.additionalInfo"
+                name="additionalInfo"
+                rows="3"
+              ></textarea>
+            </div>
+
+            <div class="form__group">
+              <label for="edit-foundDate" class="form__label form__label--required">
+                Data znalezienia
+              </label>
+              <input
+                type="date"
+                id="edit-foundDate"
+                class="form__input"
+                [(ngModel)]="editedData.foundDate"
+                name="foundDate"
+                required
+              />
+            </div>
+
+            <div class="form__group">
+              <label for="edit-location" class="form__label form__label--required">
+                Miejscowość
+              </label>
+              <input
+                type="text"
+                id="edit-location"
+                class="form__input"
+                [(ngModel)]="editedData.location"
+                name="location"
+                required
+              />
+            </div>
+
+            <div class="form__group">
+              <label for="edit-foundPlace" class="form__label">
+                Miejsce znalezienia (opcjonalnie)
+              </label>
+              <input
+                type="text"
+                id="edit-foundPlace"
+                class="form__input"
+                [(ngModel)]="editedData.foundPlace"
+                name="foundPlace"
+              />
+            </div>
+
+            <div class="form__group">
+              <label for="edit-notificationDate" class="form__label form__label--required">
+                Termin odbioru
+              </label>
+              <input
+                type="date"
+                id="edit-notificationDate"
+                class="form__input"
+                [(ngModel)]="editedData.notificationDate"
+                name="notificationDate"
+                required
+              />
+            </div>
+
+            <div class="form__group">
+              <label for="edit-warehousePlace" class="form__label form__label--required">
+                Miejsce w magazynie
+              </label>
+              <input
+                type="text"
+                id="edit-warehousePlace"
+                class="form__input"
+                [(ngModel)]="editedData.warehousePlace"
+                name="warehousePlace"
+                required
+              />
+            </div>
+
+            <div class="home__modal-actions">
+              <button
+                type="button"
+                class="form__button form__button--danger"
+                (click)="deleteItem()"
+              >
+                Usuń przedmiot
+              </button>
+              <div class="home__modal-actions-right">
+                <button
+                  type="button"
+                  class="form__button form__button--secondary"
+                  (click)="closeModal()"
+                >
+                  Anuluj
+                </button>
+                <button
+                  type="submit"
+                  class="form__button form__button--primary"
+                >
+                  Zapisz zmiany
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  }
+</div>
+

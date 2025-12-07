@@ -1,0 +1,262 @@
+.import-file {
+  padding: 2rem 0;
+
+  &__step-indicator {
+    margin-bottom: 1rem;
+  }
+
+  &__step-text {
+    font-size: 0.875rem;
+    color: #505a5f;
+    font-weight: 600;
+  }
+
+  &__title {
+    margin-bottom: 2rem;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 700;
+    font-style: normal;
+    font-size: 1.875rem;
+    line-height: 100%;
+    letter-spacing: 0%;
+    color: #333333;
+  }
+
+  &__drop-zone {
+    width: 100%;
+    min-height: 220px;
+    border: 2px dashed #005ea5;
+    border-radius: 8px;
+    background-color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    transition: all 0.2s ease;
+    cursor: pointer;
+
+    &--dragging {
+      background-color: #f0f7ff;
+      border-color: #004080;
+    }
+
+    &:hover {
+      background-color: #f9f9f9;
+    }
+  }
+
+  &__drop-zone-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    text-align: center;
+  }
+
+  &__icon {
+    width: 2rem;
+    height: 2rem;
+    margin-bottom: 0.5rem;
+    display: block;
+  }
+
+  &__text {
+    margin: 0;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 0.875rem;
+    line-height: 100%;
+    letter-spacing: 0%;
+    text-align: center;
+    color: #565656;
+  }
+
+  &__file-input {
+    display: none;
+  }
+
+  &__format-info {
+    margin: 0;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 0.75rem;
+    line-height: 100%;
+    letter-spacing: 0%;
+    text-align: center;
+    color: #565656;
+  }
+
+  &__selected-file {
+    margin-top: 1.5rem;
+    padding: 1rem;
+    background-color: #f3f2f1;
+    border-radius: 4px;
+    font-family: 'Roboto', sans-serif;
+    font-size: 0.875rem;
+    color: #0b0c0c;
+
+    strong {
+      font-weight: 600;
+    }
+  }
+
+  &__drop-zone--loading {
+    pointer-events: none;
+    opacity: 0.7;
+  }
+
+  &__loader {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+  }
+
+  &__spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid #f3f2f1;
+    border-top: 4px solid #005ea5;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+  }
+
+  &__error {
+    margin-top: 1.5rem;
+    padding: 1rem;
+    background-color: #fef2f2;
+    border: 2px solid #d4351c;
+    border-radius: 4px;
+    font-family: 'Roboto', sans-serif;
+    font-size: 0.875rem;
+    color: #d4351c;
+
+    strong {
+      font-weight: 600;
+    }
+  }
+
+  &__success {
+    margin-top: 1.5rem;
+    padding: 1rem;
+    background-color: #f0f7ff;
+    border: 2px solid #005ea5;
+    border-radius: 4px;
+    font-family: 'Roboto', sans-serif;
+    font-size: 0.875rem;
+    color: #0b0c0c;
+
+    strong {
+      font-weight: 600;
+    }
+  }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+// High contrast modes
+body.black-white,
+html.black-white,
+.black-white {
+  .import-file {
+    &__step-text {
+      color: #ffffff !important;
+    }
+
+    &__title {
+      color: #ffffff !important;
+    }
+
+    &__drop-zone {
+      border-color: #ffffff !important;
+      background-color: #000000 !important;
+
+      &--dragging {
+        background-color: #1a1a1a !important;
+      }
+    }
+
+    &__text,
+    &__format-info {
+      color: #ffffff !important;
+    }
+
+    &__selected-file {
+      background-color: #1a1a1a !important;
+      color: #ffffff !important;
+    }
+  }
+}
+
+body.black-yellow,
+html.black-yellow,
+.black-yellow {
+  .import-file {
+    &__step-text {
+      color: #ffff00 !important;
+    }
+
+    &__title {
+      color: #ffff00 !important;
+    }
+
+    &__drop-zone {
+      border-color: #ffff00 !important;
+      background-color: #000000 !important;
+
+      &--dragging {
+        background-color: #1a1a1a !important;
+      }
+    }
+
+    &__text,
+    &__format-info {
+      color: #ffff00 !important;
+    }
+
+    &__selected-file {
+      background-color: #1a1a1a !important;
+      color: #ffff00 !important;
+    }
+  }
+}
+
+body.yellow-black,
+html.yellow-black,
+.yellow-black {
+  .import-file {
+    &__step-text {
+      color: #000000 !important;
+    }
+
+    &__title {
+      color: #000000 !important;
+    }
+
+    &__drop-zone {
+      border-color: #000000 !important;
+      background-color: #ffff00 !important;
+
+      &--dragging {
+        background-color: #e6e600 !important;
+      }
+    }
+
+    &__text,
+    &__format-info {
+      color: #000000 !important;
+    }
+
+    &__selected-file {
+      background-color: #e6e600 !important;
+      color: #000000 !important;
+    }
+  }
+}

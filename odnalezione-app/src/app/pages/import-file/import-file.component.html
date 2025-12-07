@@ -1,0 +1,68 @@
+<div class="import-file">
+  <div class="import-file__step-indicator">
+    <span class="import-file__step-text">Krok 1/2</span>
+  </div>
+
+  <h1 class="import-file__title">Wgraj plik z danymi</h1>
+
+  <div
+    class="import-file__drop-zone"
+    [class.import-file__drop-zone--dragging]="isDragging"
+    [class.import-file__drop-zone--loading]="isLoading"
+    (dragover)="onDragOver($event)"
+    (dragleave)="onDragLeave($event)"
+    (drop)="onDrop($event)"
+  >
+    @if (isLoading) {
+      <div class="import-file__loader">
+        <div class="import-file__spinner"></div>
+        <p class="import-file__text">Przetwarzanie pliku...</p>
+      </div>
+    } @else {
+      <div class="import-file__drop-zone-content">
+        <img
+          src="/icons/upload-icon.svg"
+          alt="Ikona wgrywania pliku"
+          class="import-file__icon"
+        />
+        <p class="import-file__text">Przeciągnij i upuść</p>
+        <p class="import-file__text">lub</p>
+        <button
+          type="button"
+          class="form__button form__button--primary"
+          (click)="triggerFileInput()"
+        >
+          Wybierz plik
+        </button>
+        <input
+          type="file"
+          id="file-input"
+          class="import-file__file-input"
+          accept=".csv,.xls,.xlsx,.pdf"
+          (change)="onFileSelected($event)"
+        />
+        <p class="import-file__format-info">Dozwolony format: .csv, .xls, .pdf</p>
+      </div>
+    }
+  </div>
+
+  @if (error) {
+    <div class="import-file__error">
+      <p><strong>Błąd:</strong> {{ error }}</p>
+    </div>
+  }
+
+  @if (selectedFile && !isLoading) {
+    <div class="import-file__selected-file">
+      <p>Wybrany plik: <strong>{{ selectedFile.name }}</strong></p>
+    </div>
+  }
+
+  @if (uploadResponse?.success && uploadResponse?.records) {
+    <div class="import-file__success">
+      <p><strong>{{ uploadResponse?.message }}</strong></p>
+      <p>Znaleziono <strong>{{ uploadResponse?.records?.length }}</strong> rekordów do weryfikacji.</p>
+      <!-- TODO: Tutaj będzie tabela z rekordami -->
+    </div>
+  }
+</div>

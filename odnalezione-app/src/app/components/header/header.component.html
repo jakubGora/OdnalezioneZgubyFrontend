@@ -1,0 +1,126 @@
+<header class="page-header" role="banner">
+  <!-- SKIP LINKS: ACCESSIBILITY -->
+  <div class="skip-menu">
+    <ul class="skip-menu__list">
+      <li>
+        <a class="skip-menu__link" href="#main-content" (click)="skipTo('main-content', $event)">
+          Przejdź do treści
+        </a>
+      </li>
+      <li>
+        <a class="skip-menu__link" href="#main-footer" (click)="skipTo('main-footer', $event)">
+          Przejdź do stopki
+        </a>
+      </li>
+    </ul>
+  </div>
+
+  <!-- GOV.PL BAR -->
+  <div class="govpl">
+    <a class="govpl__logo" href="https://www.gov.pl/" aria-label="Strona główna gov.pl" target="_blank">
+      gov.pl
+      <span class="visually-hidden">Otwiera się w nowym oknie</span>
+    </a>
+
+    <span class="govpl__text">Serwis Rzeczypospolitej Polskiej</span>
+
+    <div class="govpl__right-section">
+      <div class="a11y-wrapper">
+        <div class="a11y-buttons">
+          <!-- HIGH CONTRAST -->
+          <ul class="a11y-buttons__group">
+            <!-- default -->
+            <li class="a11y-buttons__item">
+              <button class="btn btn--hc btn--hc-default" (click)="disableHighContrast()">
+                <span aria-hidden="true">A</span>
+                <span class="visually-hidden">Kontrast domyślny</span>
+              </button>
+            </li>
+
+            <!-- black background, white text-->
+            <li class="a11y-buttons__item">
+              <button class="btn btn--hc btn--hc-bw" (click)="useHighContrast('black-white')">
+                <span aria-hidden="true">A</span>
+                <span class="visually-hidden">Kontrast czarno-biały</span>
+              </button>
+            </li>
+
+            <!-- black background, yellow text -->
+            <li class="a11y-buttons__item">
+              <button class="btn btn--hc btn--hc-by" (click)="useHighContrast('black-yellow')">
+                <span aria-hidden="true">A</span>
+                <span class="visually-hidden">Kontrast czarno-żółty</span>
+              </button>
+            </li>
+
+            <!-- yellow background, black text -->
+            <li class="a11y-buttons__item">
+              <button class="btn btn--hc btn--hc-yb" (click)="useHighContrast('yellow-black')">
+                <span aria-hidden="true">A</span>
+                <span class="visually-hidden">Kontrast żółto-czarny</span>
+              </button>
+            </li>
+          </ul>
+
+          <!-- FONT SIZE INCREASE/DECREASE -->
+          <ul class="a11y-buttons__group">
+            <!-- default -->
+            <li class="a11y-buttons__item">
+              <button class="btn btn--font btn--font-0" (click)="useFontSize(100)">
+                <span aria-hidden="true"> A </span>
+                <span class="visually-hidden">Rozmiar czcionki domyślny</span>
+              </button>
+            </li>
+
+            <!-- 125% -->
+            <li class="a11y-buttons__item">
+              <button class="btn btn--font btn--font-1" (click)="useFontSize(125)">
+                <span aria-hidden="true"> A<span class="plus">+</span> </span>
+                <span class="visually-hidden">Zwiększ rozmiar czcionki - 125%</span>
+              </button>
+            </li>
+
+            <!-- 150% -->
+            <li class="a11y-buttons__item">
+              <button class="btn btn--font btn--font-2" (click)="useFontSize(150)">
+                <span aria-hidden="true"> A<span class="plus">++</span> </span>
+                <span class="visually-hidden">Zwiększ rozmiar czcionki - 150%</span>
+              </button>
+            </li>
+
+            <!-- 200% -->
+            <li class="a11y-buttons__item">
+              <button class="btn btn--font btn--font-3" (click)="useFontSize(200)">
+                <span aria-hidden="true"> A<span class="plus">+++</span> </span>
+                <span class="visually-hidden">Zwiększ rozmiar czcionki - 200%</span>
+              </button>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <span class="govpl__eu-logo-wrapper logo-eu">
+        <img
+          class="govpl__eu-logo contrast-normal"
+          src="/eu-logo/logo-eu.svg"
+          alt="Logotyp Unii Europejskiej"
+        />
+        <img
+          class="govpl__eu-logo contrast-black-white"
+          src="/eu-logo/logo-eu-black-background.svg"
+          alt="Logotyp Unii Europejskiej"
+        />
+        <img
+          class="govpl__eu-logo contrast-black-yellow"
+          src="/eu-logo/logo-eu-black-background.svg"
+          alt="Logotyp Unii Europejskiej"
+        />
+        <img 
+          class="govpl__eu-logo contrast-yellow-black"
+          src="/eu-logo/logo-eu.svg"
+          alt="Logotyp Unii Europejskiej"
+        />
+      </span>
+    </div>
+  </div>
+</header>

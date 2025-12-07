@@ -1,0 +1,71 @@
+.page-footer {
+  background-color: #f3f2f1;
+  border-top: 1px solid #b1b4b6;
+  padding: 1.5rem 0;
+  margin-top: auto;
+
+  &__content {
+    padding: 0 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  &__text {
+    margin: 0;
+    color: #0b0c0c;
+    font-size: 0.875rem;
+    line-height: 1.5;
+  }
+
+  &__hackathon {
+    margin: 0.75rem 0 0 0;
+    color: #505a5f;
+    font-size: 0.8125rem;
+    line-height: 1.5;
+    font-style: italic;
+
+    strong {
+      font-weight: 600;
+      font-style: normal;
+      color: #0b0c0c;
+    }
+  }
+}
+
+// High contrast modes
+.black-white,
+.black-yellow,
+.yellow-black {
+  .page-footer {
+    background-color: #000000;
+    border-top-color: #ffffff;
+    color: #ffffff;
+
+    &__text,
+    &__hackathon {
+      color: #ffffff;
+    }
+
+    &__hackathon strong {
+      color: #ffffff;
+    }
+  }
+}
+
+.yellow-black {
+  .page-footer {
+    background-color: #ffff00;
+    border-top-color: #000000;
+
+    &__text,
+    &__hackathon {
+      color: #000000;
+    }
+
+    &__hackathon strong {
+      color: #000000;
+    }
+  }
+}
+

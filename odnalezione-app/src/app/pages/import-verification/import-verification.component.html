@@ -1,0 +1,419 @@
+<div class="import-verification">
+  <div class="import-verification__header">
+    <div class="import-verification__header-left">
+      <div class="import-verification__step-indicator">
+        <span class="import-verification__step-text">Krok 2/2</span>
+      </div>
+      
+      <h1 class="import-file__title">Sprawdź i edytuj dane</h1>
+    </div>
+
+  
+    <div class="import-verification__header-right">
+      <div class="import-verification__header-center">
+        <button
+          type="button"
+          class="import-verification__preview-link"
+          (click)="openPreview()"
+        >
+          <svg class="import-verification__preview-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+            <circle cx="12" cy="12" r="3"></circle>
+          </svg>
+          Podgląd wczytanego pliku
+        </button>
+      </div>
+      <button
+        type="button"
+        class="form__button form__button--primary"
+        (click)="submitAccepted()"
+        [disabled]="getAcceptedCount() === 0"
+      >
+        Wyślij zaakceptowane ({{ getAcceptedCount() }})
+      </button>
+    </div>
+  </div>
+
+  <div class="import-verification__table-wrapper">
+    <table class="import-verification__table">
+      <thead>
+        <tr>
+          <th class="import-verification__th">ID</th>
+          <th class="import-verification__th">Rodzaj i kolor przedmiotu</th>
+          <th class="import-verification__th">Opis ogólny</th>
+          <th class="import-verification__th">Data znalezienia</th>
+          <th class="import-verification__th">Miejsce znalezienia</th>
+          <th class="import-verification__th">Termin odbioru</th>
+          <th class="import-verification__th">ID miejsca</th>
+            <th class="import-verification__th">
+            <button
+              type="button"
+              class="import-verification__th-sort-button"
+              (click)="onSortChange('compliance')"
+            >
+              Zgodność
+              <span 
+                class="import-verification__info-icon" 
+                title="Szacowana zgodność pokazuje, na ile dane z pliku źródłowego pasują do zaproponowanego wyniku." 
+                aria-label="Informacja o zgodności"
+                (click)="$event.stopPropagation()"
+              >
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <line x1="12" y1="16" x2="12" y2="12"></line>
+                  <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                </svg>
+              </span>
+              <span class="import-verification__sort-icon">{{ getSortIcon('compliance') }}</span>
+            </button>
+          </th>
+          <th class="import-verification__th">Akcje</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (record of getVisibleRecords(); track record.index; let pairIndex = $index) {
+          <!-- Odstęp przed parą -->
+          <tr class="import-verification__spacer">
+            <td [attr.colspan]="9"></td>
+          </tr>
+          
+          <!-- Pierwszy wiersz z danymi -->
+          <tr
+            class="import-verification__row import-verification__row--first"
+            [class.import-verification__row--pair-even]="pairIndex % 2 === 0"
+            [class.import-verification__row--pair-odd]="pairIndex % 2 === 1"
+            [class.import-verification__row--selected]="selectedRows.has(record.index)"
+            [class.import-verification__row--accepted]="acceptedRows.has(record.index)"
+          >
+            <td 
+              class="import-verification__td"
+              [style.border-bottom]="acceptedRows.has(record.index) ? '1px solid #D9D9D9' : 'none'"
+            >{{ record.id || record.index }}</td>
+            <td 
+              class="import-verification__td"
+              (mouseenter)="onCellMouseEnter(record.index, 'name')"
+              (mouseleave)="onCellMouseLeave()"
+            >
+              <div class="import-verification__item-type">
+                <div class="import-verification__item-type-label">Proponowany</div>
+                <div class="import-verification__item-type-value">
+                  {{ getFieldValue(record, 'name') }}
+                </div>
+              </div>
+            </td>
+            <td 
+              class="import-verification__td"
+              (mouseenter)="onCellMouseEnter(record.index, 'generalDescription')"
+              (mouseleave)="onCellMouseLeave()"
+            >{{ record.generalDescription || '-' }}</td>
+            <td 
+              class="import-verification__td"
+              (mouseenter)="onCellMouseEnter(record.index, 'foundDate')"
+              (mouseleave)="onCellMouseLeave()"
+            >{{ getFieldValue(record, 'foundDate') }}</td>
+            <td 
+              class="import-verification__td"
+              (mouseenter)="onCellMouseEnter(record.index, 'location')"
+              (mouseleave)="onCellMouseLeave()"
+            >{{ getFieldValue(record, 'location') }}</td>
+            <td 
+              class="import-verification__td"
+              (mouseenter)="onCellMouseEnter(record.index, 'pickupDeadline')"
+              (mouseleave)="onCellMouseLeave()"
+            >{{ record.pickupDeadline || '-' }}</td>
+            <td 
+              class="import-verification__td"
+              (mouseenter)="onCellMouseEnter(record.index, 'placeId')"
+              (mouseleave)="onCellMouseLeave()"
+            >{{ record.placeId || '-' }}</td>
+            <td class="import-verification__td">
+              @if (acceptedRows.has(record.index)) {
+                <span class="import-verification__compliance-badge import-verification__compliance-badge--accepted">
+                  Zaakceptowano
+                </span>
+              } @else {
+                <div class="import-verification__compliance">
+                  <div class="import-verification__compliance-bar-wrapper">
+                    <div
+                      class="import-verification__compliance-bar"
+                      [style.width.%]="record.overall_score * 100"
+                      [attr.data-status]="getComplianceStatus(record.overall_score)"
+                    ></div>
+                  </div>
+                  <span class="import-verification__compliance-text">
+                    {{ getCompliancePercentage(record.overall_score) }}% - {{ getComplianceLabel(record.overall_score) }}
+                  </span>
+                </div>
+              }
+            </td>
+            <td 
+              class="import-verification__td"
+              [style.border-bottom]="acceptedRows.has(record.index) ? '1px solid #D9D9D9' : 'none'"
+            >
+              <div class="import-verification__actions">
+                @if (!acceptedRows.has(record.index)) {
+                  <button
+                    type="button"
+                    class="form__button form__button--primary form__button--small"
+                    (click)="acceptRecord(record.index)"
+                  >
+                    Akceptuj
+                  </button>
+                } @else {
+                  <button
+                    type="button"
+                    class="form__button form__button--secondary form__button--small"
+                    (click)="unacceptRecord(record.index)"
+                  >
+                    Cofnij akceptację
+                  </button>
+                }
+                <button
+                  type="button"
+                  class="form__button form__button--secondary form__button--small"
+                  (click)="editRecord(record.index)"
+                >
+                  Edytuj/Usuń
+                </button>
+              </div>
+            </td>
+          </tr>
+          <!-- Drugi wiersz z source_row (Oryginał) - ukryty dla zaakceptowanych -->
+          @if (!acceptedRows.has(record.index)) {
+            <tr
+              class="import-verification__row import-verification__row--secound"
+              [class.import-verification__row--pair-even]="pairIndex % 2 === 0"
+              [class.import-verification__row--pair-odd]="pairIndex % 2 === 1"
+            > 
+              <td class="import-verification__td" style="border-top: none;"></td>
+              <td class="import-verification__td" [attr.colspan]="7">
+                <div class="">
+                  <div class="import-verification__source-row-label">Oryginał</div>
+                  <div 
+                    class="import-verification__source-row-text"
+                    [innerHTML]="getHighlightedSourceRow(record)"
+                  ></div>
+                </div>
+              </td>
+              <td class="import-verification__td" style="border-top: none;"></td>
+            </tr>
+          }
+        }
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Modal do edycji/usuwania rekordu -->
+  @if (isModalOpen) {
+    <div class="import-verification__modal-overlay" (click)="closeModal()">
+      <div class="import-verification__modal" (click)="$event.stopPropagation()">
+        <div class="import-verification__modal-header">
+          <h2 class="import-verification__modal-title">Edytuj rekord</h2>
+          <button
+            type="button"
+            class="import-verification__modal-close"
+            (click)="closeModal()"
+            aria-label="Zamknij"
+          >
+            ×
+          </button>
+        </div>
+
+        <div class="import-verification__modal-body">
+          <form class="form" (ngSubmit)="saveEditedRecord()">
+            <div class="form__group">
+              <label for="edit-name" class="form__label form__label--required">
+                Rodzaj przedmiotu
+              </label>
+              <input
+                type="text"
+                id="edit-name"
+                class="form__input"
+                [(ngModel)]="editedData.name"
+                name="name"
+                required
+              />
+            </div>
+
+            <div class="form__group">
+              <label for="edit-generalDescription" class="form__label">
+                Opis ogólny
+              </label>
+              <textarea
+                id="edit-generalDescription"
+                class="form__textarea"
+                [(ngModel)]="editedData.generalDescription"
+                name="generalDescription"
+                rows="3"
+              ></textarea>
+            </div>
+
+            <div class="form__group">
+              <label for="edit-foundDate" class="form__label form__label--required">
+                Data znalezienia
+              </label>
+              <input
+                type="date"
+                id="edit-foundDate"
+                class="form__input"
+                [(ngModel)]="editedData.foundDate"
+                name="foundDate"
+                required
+              />
+            </div>
+
+            <div class="form__group">
+              <label for="edit-location" class="form__label form__label--required">
+                Miejsce znalezienia
+              </label>
+              <input
+                type="text"
+                id="edit-location"
+                class="form__input"
+                [(ngModel)]="editedData.location"
+                name="location"
+                required
+              />
+            </div>
+
+            <div class="form__group">
+              <label for="edit-foundPlace" class="form__label">
+                Miejsce znalezienia (szczegóły)
+              </label>
+              <input
+                type="text"
+                id="edit-foundPlace"
+                class="form__input"
+                [(ngModel)]="editedData.foundPlace"
+                name="foundPlace"
+              />
+            </div>
+
+            <div class="form__group">
+              <label for="edit-pickupDeadline" class="form__label">
+                Termin odbioru
+              </label>
+              <input
+                type="text"
+                id="edit-pickupDeadline"
+                class="form__input"
+                [(ngModel)]="editedData.pickupDeadline"
+                name="pickupDeadline"
+              />
+            </div>
+
+            <div class="form__group">
+              <label for="edit-placeId" class="form__label">
+                ID miejsca
+              </label>
+              <input
+                type="text"
+                id="edit-placeId"
+                class="form__input"
+                [(ngModel)]="editedData.placeId"
+                name="placeId"
+              />
+            </div>
+
+            <div class="import-verification__modal-actions">
+              <button
+                type="button"
+                class="form__button form__button--danger"
+                (click)="deleteRecordFromModal()"
+              >
+                Usuń rekord
+              </button>
+              <div class="import-verification__modal-actions-right">
+                <button
+                  type="button"
+                  class="form__button form__button--secondary"
+                  (click)="closeModal()"
+                >
+                  Anuluj
+                </button>
+                <button
+                  type="submit"
+                  class="form__button form__button--primary"
+                >
+                  Zapisz zmiany
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  }
+
+  <!-- Modal informacyjny po wgraniu pliku -->
+  @if (isInfoModalOpen) {
+    <div class="import-verification__info-modal-overlay" (click)="closeInfoModal()">
+      <div class="import-verification__info-modal-content" (click)="$event.stopPropagation()">
+        <div class="import-verification__info-modal-header">
+          <h2 class="import-verification__info-modal-title">
+            Plik wgrano poprawnie, zweryfikuj wczytane przedmioty
+          </h2>
+          <button
+            class="import-verification__info-modal-close"
+            (click)="closeInfoModal()"
+            aria-label="Zamknij modal"
+          >
+            &times;
+          </button>
+        </div>
+        <div class="import-verification__info-modal-body">
+          <p class="import-verification__info-modal-text">
+            Zgodność danych z pliku z <strong>{{ fileName }}</strong> jest wyliczana automatycznie (AI), ale wymaga Twojego potwierdzenia.
+          </p>
+          <p class="import-verification__info-modal-question">Co musisz zrobić?</p>
+          <ul class="import-verification__info-modal-list">
+            <li>Zatwierdź poprawne wpisy</li>
+            <li>Popraw lub usuń te, które się nie zgadzają</li>
+            <li>Zapisz jako wersję roboczą, jeśli chcesz wrócić do edycji później</li>
+          </ul>
+        </div>
+        <div class="import-verification__info-modal-actions">
+          <button
+            type="button"
+            class="form__button form__button--primary"
+            (click)="closeInfoModal()"
+          >
+            Rozumiem, przejdź do przeglądania
+          </button>
+        </div>
+      </div>
+    </div>
+  }
+
+  <!-- Bottom sheet z podglądem pliku -->
+  @if (isPreviewOpen) {
+    <div class="import-verification__preview-overlay" (click)="closePreview()">
+      <div class="import-verification__preview-sheet" (click)="$event.stopPropagation()">
+        <div class="import-verification__preview-header">
+          <h2 class="import-verification__preview-title">Podgląd pliku: {{ previewFileName }}</h2>
+          <button
+            class="import-verification__preview-close"
+            (click)="closePreview()"
+            aria-label="Zamknij podgląd"
+          >
+            &times;
+          </button>
+        </div>
+        <div class="import-verification__preview-body">
+          @if (previewFileType === 'pdf' && previewPdfUrl) {
+            <iframe
+              [src]="previewPdfUrl"
+              class="import-verification__preview-pdf"
+              title="Podgląd pliku PDF"
+            ></iframe>
+          } @else if (previewContent !== null) {
+            <pre class="import-verification__preview-content">{{ previewContent }}</pre>
+          } @else {
+            <p class="import-verification__preview-loading">Ładowanie zawartości pliku...</p>
+          }
+        </div>
+      </div>
+    </div>
+  }
+</div>
+

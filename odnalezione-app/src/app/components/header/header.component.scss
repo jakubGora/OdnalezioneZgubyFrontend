@@ -1,0 +1,479 @@
+// Variables from reference
+$color-white: #fff;
+$color-black: #000;
+$color-yellow: #ff0;
+$color-blue-light: #0865c9;
+$color-blue-dark: #0f2648;
+$color-grey-light-6: #eee;
+$color-heading: #333;
+$color-text: #555;
+$color-gov-primary: #0052a5;
+
+// Breakpoints
+@mixin media-breakpoint-down($size) {
+  @if $size == xl {
+    @media (max-width: 1199px) { @content; }
+  } @else if $size == lg {
+    @media (max-width: 991px) { @content; }
+  } @else if $size == md {
+    @media (max-width: 767px) { @content; }
+  } @else if $size == sm {
+    @media (max-width: 575px) { @content; }
+  }
+}
+
+@mixin media-breakpoint-up($size) {
+  @if $size == lg {
+    @media (min-width: 992px) { @content; }
+  } @else if $size == xl {
+    @media (min-width: 1200px) { @content; }
+  }
+}
+
+// Skip menu
+.skip-menu {
+  position: absolute;
+  top: 0;
+  left: 0;
+  list-style: none;
+  background-color: $color-blue-dark;
+  z-index: 3;
+
+  &__list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    color: $color-white;
+  }
+
+  &__link {
+    position: absolute;
+    left: -9999px;
+    margin: 0.5rem;
+    padding: 0.5rem;
+    display: inline-block;
+    color: inherit;
+    text-decoration: none;
+
+    &:hover {
+      color: inherit;
+    }
+
+    &:focus {
+      position: relative;
+      left: 0;
+    }
+  }
+}
+
+// Gov.pl bar
+.govpl {
+  background-color: $color-white;
+  padding: 0.75rem;
+  display: flex;
+  align-items: center;
+
+  @include media-breakpoint-down(xl) {
+    justify-content: space-between;
+  }
+
+  &__logo {
+    background-image: url("/images/Herb_Polski.svg");
+    background-size: contain;
+    background-repeat: no-repeat;
+    color: $color-black;
+    text-decoration: none;
+    margin-left: 1rem;
+    padding-left: 3rem;
+    font-weight: bold;
+    font-size: 1.6rem;
+    height: 3rem;
+    line-height: 2;
+
+    &:hover {
+      text-decoration: underline;
+      color: #05407f;
+    }
+
+    @include media-breakpoint-down(xl) {
+      height: 2rem;
+      line-height: 1.5;
+      font-size: 1.25rem;
+      margin-left: 0.5rem;
+      padding-left: 2rem;
+    }
+  }
+
+  &__text {
+    margin-left: 2rem;
+    padding-left: 2rem;
+    border-left: 2px solid #d40043;
+    line-height: 3.5;
+
+    @include media-breakpoint-down(xl) {
+      display: none;
+    }
+  }
+
+  &__panel-login {
+    border-radius: 5px;
+    margin-left: auto;
+    padding: 0.5rem 1rem;
+    background-color: $color-gov-primary;
+    color: $color-white;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+
+    .icon {
+      height: 1.25rem;
+      width: 1.25rem;
+    }
+
+    @include media-breakpoint-down(xl) {
+      display: none;
+    }
+  }
+
+  &__right-section {
+    display: flex;
+    align-items: center;
+    margin-left: auto;
+    gap: 1rem;
+  }
+
+  &__eu-logo-wrapper {
+    border-left: 2px solid $color-grey-light-6;
+    padding-left: 1.25rem;
+  }
+
+  .a11y-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+
+    @include media-breakpoint-down(xl) {
+      margin-left: auto;
+    }
+  }
+
+  .a11y-buttons {
+    display: flex;
+
+    &__group {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      display: flex;
+      align-items: center;
+
+      &:last-child {
+        margin-left: 15px;
+
+        @include media-breakpoint-down(md) {
+          display: none;
+        }
+      }
+    }
+
+    &__item {
+      margin-right: 3px;
+
+      .btn {
+        padding: 0;
+        font-size: 16px;
+        border: none;
+        background: transparent;
+        cursor: pointer;
+
+        &--font {
+          padding: 0 2px;
+          background-color: transparent;
+          position: relative;
+          line-height: 1;
+          overflow: visible;
+
+          &-0 { padding-right: 6px; }
+          &-1 { padding-right: 10px; }
+          &-2 { padding-right: 16px; }
+          &-3 { padding-right: 24px; }
+
+          .plus {
+            position: absolute;
+            top: -3px;
+            left: 12px;
+            font-weight: bold;
+            white-space: nowrap;
+          }
+        }
+
+        &--hc {
+          width: 25px;
+          height: 25px;
+          box-sizing: border-box;
+          border: 1px solid $color-black;
+          padding: 0 2px;
+
+          &-default {
+            background-color: $color-white;
+            border-color: inherit;
+          }
+
+          &-bw {
+            background-color: $color-black;
+            color: $color-white;
+          }
+
+          &-by {
+            background-color: $color-black;
+            color: $color-yellow;
+          }
+
+          &-yb {
+            background-color: $color-yellow;
+          }
+        }
+      }
+    }
+  }
+
+  &__eu-logo {
+    width: 4.875rem;
+    display: none;
+
+    @include media-breakpoint-down(xl) {
+      width: 3rem;
+    }
+  }
+}
+
+.logo-eu {
+  img {
+    display: none;
+  }
+
+  img.contrast-normal {
+    display: block;
+  }
+}
+
+// When body or html has contrast class, hide normal and show appropriate variant
+body.black-white,
+html.black-white,
+.black-white {
+  .logo-eu {
+    img {
+      display: none;
+    }
+
+    img.contrast-black-white {
+      display: block;
+    }
+  }
+}
+
+body.black-yellow,
+html.black-yellow,
+.black-yellow {
+  .logo-eu {
+    img {
+      display: none;
+    }
+
+    img.contrast-black-yellow {
+      display: block;
+    }
+  }
+}
+
+body.yellow-black,
+html.yellow-black,
+.yellow-black {
+  .logo-eu {
+    img {
+      display: none;
+    }
+
+    img.contrast-yellow-black {
+      display: block;
+    }
+  }
+}
+
+// Top bar
+.gov-top-bar-wrapper {
+  background-color: $color-white;
+
+  .top-bar {
+    padding: 10px 0;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+
+    .a11y-wrapper {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      padding-left: 0.7rem;
+    }
+
+    @include media-breakpoint-down(xl) {
+      .a11y-wrapper {
+        margin-left: auto;
+        padding-left: 0;
+      }
+    }
+
+    .a11y-buttons {
+      display: flex;
+
+      &__group {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+        display: flex;
+        align-items: center;
+
+        &:last-child {
+          margin-left: 15px;
+
+          @include media-breakpoint-down(md) {
+            display: none;
+          }
+        }
+      }
+
+      &__item {
+        margin-right: 3px;
+
+        .btn {
+          padding: 0;
+          font-size: 16px;
+          border: none;
+          background: transparent;
+          cursor: pointer;
+
+          &--font {
+            padding: 0 2px;
+            background-color: transparent;
+            position: relative;
+            line-height: 1;
+            overflow: visible;
+
+            &-0 { padding-right: 6px; }
+            &-1 { padding-right: 10px; }
+            &-2 { padding-right: 16px; }
+            &-3 { padding-right: 24px; }
+
+            .plus {
+              position: absolute;
+              top: -3px;
+              left: 12px;
+              font-weight: bold;
+              white-space: nowrap;
+            }
+          }
+
+          &--hc {
+            width: 25px;
+            height: 25px;
+            box-sizing: border-box;
+            border: 1px solid $color-black;
+
+            &-default {
+              background-color: $color-white;
+              border-color: inherit;
+            }
+
+            &-bw {
+              background-color: $color-black;
+              color: $color-white;
+            }
+
+            &-by {
+              background-color: $color-black;
+              color: $color-yellow;
+            }
+
+            &-yb {
+              background-color: $color-yellow;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+// Utility classes
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.btn {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  border: 1px solid;
+  border-radius: 4px;
+  text-decoration: none;
+  cursor: pointer;
+  font-size: 1rem;
+  font-family: inherit;
+  transition: all 0.2s ease;
+
+  &:focus {
+    outline: 3px solid $color-blue-light;
+    outline-offset: 2px;
+  }
+
+  &-primary {
+    background-color: $color-blue-light;
+    border-color: $color-blue-light;
+    color: $color-white;
+
+    &:hover {
+      background-color: #0655a5;
+      border-color: #0655a5;
+    }
+
+    &:active {
+      background-color: #054080;
+      border-color: #054080;
+    }
+  }
+}
+
+// Icon styles
+.icon {
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  fill: currentColor;
+  vertical-align: middle;
+
+  &-gov-user {
+    fill: currentColor;
+  }
+}
+
+// Page header wrapper
+.page-header {
+  position: relative;
+  width: 100%;
+}

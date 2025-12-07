@@ -1,0 +1,25 @@
+<div class="notifications" aria-live="polite" aria-atomic="true">
+  @for (notification of notifications; track notification.id) {
+    <div
+      class="notification notification--{{ notification.type }}"
+      role="alert"
+      [attr.aria-live]="notification.type === 'error' ? 'assertive' : 'polite'"
+    >
+      <div class="notification__content">
+        <span class="notification__icon" aria-hidden="true">
+          {{ getIcon(notification.type) }}
+        </span>
+        <p class="notification__message">{{ notification.message }}</p>
+      </div>
+      <button
+        type="button"
+        class="notification__close"
+        (click)="removeNotification(notification.id)"
+        aria-label="Zamknij powiadomienie"
+      >
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+  }
+</div>
+
