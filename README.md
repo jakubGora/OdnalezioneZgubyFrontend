@@ -2,6 +2,8 @@
 
 Aplikacja webowa do zarządzania rejestrem rzeczy znalezionych, zbudowana w Angular 20 z wykorzystaniem NX monorepo. Aplikacja umożliwia ręczne dodawanie przedmiotów, import plików CSV z automatyczną konwersją i walidacją danych przy użyciu AI, oraz przeglądanie i zarządzanie zapisanymi przedmiotami.
 
+# Demo: https://www.youtube.com/watch?v=KTjW4EjQPq0
+
 ## 🚀 Technologie
 
 - **Angular 20** - Framework aplikacji
