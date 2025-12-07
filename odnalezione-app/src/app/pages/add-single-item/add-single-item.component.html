@@ -60,35 +60,13 @@
         ></textarea>
       </div>
 
-      <div class="form__group">
-        <a href="#" class="add-single-item__photo-link" (click)="$event.preventDefault()">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="add-single-item__photo-icon">
-            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
-            <circle cx="8.5" cy="8.5" r="1.5"></circle>
-            <polyline points="21 15 16 10 5 21"></polyline>
-          </svg>
-          Dodaj zdjęcie (opcjonalnie)
-        </a>
-      </div>
-
-      <div class="add-single-item__layout">
-        <div class="add-single-item__form-section">
-          <div class="form__button-group">
-            <button type="button" class="form__button form__button--secondary" (click)="cancelForm()">
-              Anuluj wypełnianie
-            </button>
-            <button type="submit" class="form__button form__button--primary">
-              Przejdź do Kroku 2
-            </button>
-          </div>
-        </div>
-
-        <div class="add-single-item__instruction-box">
-          <div class="add-single-item__instruction-label">Instrukcja</div>
-          <div class="add-single-item__instruction-content">
-            <!-- Treść instrukcji będzie dodana później -->
-          </div>
-        </div>
+      <div class="form__button-group">
+        <button type="button" class="form__button form__button--secondary" (click)="cancelForm()">
+          Anuluj wypełnianie
+        </button>
+        <button type="submit" class="form__button form__button--primary">
+          Przejdź do Kroku 2
+        </button>
       </div>
     </form>
   }
@@ -124,7 +102,6 @@
           required
         />
         <datalist id="locations-list">
-          <!-- TODO: Dodać listę miejscowości z API -->
         </datalist>
       </div>
 

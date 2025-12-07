@@ -22,27 +22,24 @@ export class ImportVerificationComponent implements OnInit {
 
   fileName: string = '';
   records: ImportRecord[] = [];
-  selectedRows: Set<number> = new Set(); // Przechowuje index z rekordu
-  acceptedRows: Set<number> = new Set(); // Przechowuje index z rekordu
+  selectedRows: Set<number> = new Set();
+  acceptedRows: Set<number> = new Set();
   private readonly STORAGE_KEY = 'accepted_import_records';
   
-  // Sortowanie
   sortField: 'compliance' | null = null;
   sortDirection: 'asc' | 'desc' = 'asc';
 
-  // Modal state
   isModalOpen: boolean = false;
-  isInfoModalOpen: boolean = false; // Modal informacyjny po wgraniu pliku
-  isPreviewOpen: boolean = false; // Bottom sheet z podglądem pliku
-  previewContent: string | null = null; // Zawartość pliku do wyświetlenia (null = ładowanie)
-  previewFileName: string = ''; // Nazwa pliku do wyświetlenia
-  previewFileType: 'text' | 'pdf' | 'excel' = 'text'; // Typ pliku do wyświetlenia
-  previewPdfUrl: SafeResourceUrl | null = null; // Bezpieczny Data URL dla PDF
+  isInfoModalOpen: boolean = false;
+  isPreviewOpen: boolean = false;
+  previewContent: string | null = null;
+  previewFileName: string = '';
+  previewFileType: 'text' | 'pdf' | 'excel' = 'text';
+  previewPdfUrl: SafeResourceUrl | null = null;
   editingRecord: ImportRecord | null = null;
   
-  // Podświetlanie w source_row
-  highlightedRecordIndex: number | null = null; // Index rekordu, który jest podświetlany
-  highlightedFieldName: string | null = null; // Nazwa pola, które jest podświetlone
+  highlightedRecordIndex: number | null = null;
+  highlightedFieldName: string | null = null;
   editedData: {
     name: string;
     generalDescription: string;
@@ -62,13 +59,10 @@ export class ImportVerificationComponent implements OnInit {
   };
 
   ngOnInit(): void {
-    // Pobierz nazwę pliku z route params (bez rozszerzenia)
     this.route.params.subscribe((params) => {
       const fileNameWithoutExtension = decodeURIComponent(params['filename']);
       this.fileName = fileNameWithoutExtension;
       
-      // Spróbuj załadować dane z szkicu
-      // Szukamy zarówno z rozszerzeniem jak i bez (dla kompatybilności wstecznej)
       const drafts = this.fileUploadService.getDrafts();
       const draft = drafts.find(d => {
         const draftNameWithoutExt = this.removeFileExtension(d.fileName);
@@ -76,37 +70,25 @@ export class ImportVerificationComponent implements OnInit {
       });
       
       if (draft) {
-        // Załaduj dane ze szkicu
         this.records = draft.records;
         this.acceptedRows = new Set(draft.acceptedIndexes || []);
-        // Użyj nazwy bez rozszerzenia dla spójności
         this.fileName = this.removeFileExtension(draft.fileName);
-        // Załaduj zapisany plik ze szkicu
         const savedFile = this.fileUploadService.getDraftFile(draft.fileName);
-        // Zaktualizuj dane w serwisie
         this.fileUploadService.setVerificationData(this.records, draft.fileName, savedFile || undefined);
-        // Nie pokazuj modala informacyjnego dla szkiców
         this.isInfoModalOpen = false;
       } else {
-        // Pobierz dane weryfikacji z serwisu (nowy import)
         const data = this.fileUploadService.getVerificationData();
         if (data) {
           this.records = data;
-          // Załaduj zaakceptowane rekordy z localStorage
           this.loadAcceptedFromStorage();
-          // Pokaż modal informacyjny dla nowego importu
           this.isInfoModalOpen = true;
         } else {
-          // Jeśli nie ma danych, przekieruj z powrotem do importu
           this.router.navigate(['/importuj-plik']);
           return;
         }
       }
       
-      // Filtruj zaakceptowane rekordy
       this.filterAcceptedRecords();
-      
-      // Zapisz szkic przy pierwszym załadowaniu
       this.saveDraft();
     });
   }
@@ -153,14 +135,12 @@ export class ImportVerificationComponent implements OnInit {
   }
 
   acceptSelectedRecords(): void {
-    // Akceptuj wszystkie zaznaczone rekordy
     this.selectedRows.forEach((index) => {
       this.acceptedRows.add(index);
     });
     this.saveAcceptedToStorage();
     this.saveDraft();
     this.selectedRows.clear();
-    // Filtruj zaakceptowane rekordy z widoku
     this.filterAcceptedRecords();
   }
 
@@ -169,7 +149,6 @@ export class ImportVerificationComponent implements OnInit {
     if (!record) return;
 
     this.editingRecord = record;
-    // Wypełnij formularz aktualnymi danymi
     const foundDateValue = this.getFieldValue(record, 'foundDate');
     this.editedData = {
       name: this.getFieldValue(record, 'name'),
@@ -210,21 +189,18 @@ export class ImportVerificationComponent implements OnInit {
 
     this.previewFileName = file.name;
     this.isPreviewOpen = true;
-    this.previewContent = null; // Reset przed odczytem
+    this.previewContent = null;
     this.previewPdfUrl = null;
     this.previewFileType = 'text';
 
-    // Obsługa różnych typów plików
     if (file.type === 'application/pdf' || file.name.endsWith('.pdf')) {
-      // Dla PDF wczytaj jako data URL i wyświetl w iframe
       this.previewFileType = 'pdf';
       const reader = new FileReader();
       reader.onload = (e) => {
         const dataUrl = e.target?.result as string;
         if (dataUrl) {
-          // Oznacz URL jako bezpieczny dla Angular
           this.previewPdfUrl = this.sanitizer.bypassSecurityTrustResourceUrl(dataUrl);
-          this.previewContent = ''; // Ustawiamy pusty string, aby warunek @if działał
+          this.previewContent = '';
         } else {
           this.previewContent = 'Nie udało się odczytać pliku PDF.';
         }
@@ -236,13 +212,11 @@ export class ImportVerificationComponent implements OnInit {
       reader.readAsDataURL(file);
       return;
     } else if (file.name.endsWith('.xls') || file.name.endsWith('.xlsx')) {
-      // Dla Excel pokażemy informację
       this.previewFileType = 'excel';
       this.previewContent = 'Plik Excel wymaga specjalnego podglądu. Zawartość nie może być wyświetlona jako tekst.';
       return;
     }
 
-    // Odczytaj zawartość pliku dla CSV i innych tekstowych plików
     this.previewFileType = 'text';
     const reader = new FileReader();
     reader.onload = (e) => {
@@ -258,7 +232,6 @@ export class ImportVerificationComponent implements OnInit {
       this.previewContent = 'Błąd podczas odczytu pliku.';
     };
 
-    // Dla CSV i innych tekstowych plików
     if (file.type === 'text/csv' || file.name.endsWith('.csv')) {
       reader.readAsText(file, 'UTF-8');
     } else {
@@ -277,12 +250,10 @@ export class ImportVerificationComponent implements OnInit {
   saveEditedRecord(): void {
     if (!this.editingRecord) return;
 
-    // Aktualizuj dane rekordu
     if (this.editingRecord.fields['name']) {
       this.editingRecord.fields['name'].json_value = this.editedData.name;
     }
     if (this.editingRecord.fields['foundDate']) {
-      // Konwertuj datę z formatu YYYY-MM-DD (z input) do DD-MM-YYYY
       this.editingRecord.fields['foundDate'].json_value = this.convertDateFromInputFormat(this.editedData.foundDate);
     }
     if (this.editingRecord.fields['location']) {
@@ -290,19 +261,16 @@ export class ImportVerificationComponent implements OnInit {
     }
 
     this.editingRecord.generalDescription = this.editedData.generalDescription;
-    // foundPlace może być w fields lub jako osobne pole - sprawdzamy oba
     if (this.editingRecord.fields['foundPlace']) {
       this.editingRecord.fields['foundPlace'].json_value = this.editedData.foundPlace;
     }
     this.editingRecord.pickupDeadline = this.editedData.pickupDeadline;
     this.editingRecord.placeId = this.editedData.placeId;
 
-    // Jeśli rekord był zaakceptowany, zaktualizuj localStorage
     if (this.acceptedRows.has(this.editingRecord.index)) {
       this.saveAcceptedToStorage();
     }
 
-    // Zaktualizuj szkic
     this.saveDraft();
 
     this.closeModal();
@@ -317,10 +285,7 @@ export class ImportVerificationComponent implements OnInit {
       this.selectedRows.delete(recordIndex);
       this.acceptedRows.delete(recordIndex);
       
-      // Jeśli rekord był zaakceptowany, zaktualizuj localStorage
       this.saveAcceptedToStorage();
-      
-      // Zaktualizuj szkic
       this.saveDraft();
       
       this.closeModal();
@@ -334,29 +299,21 @@ export class ImportVerificationComponent implements OnInit {
       return;
     }
 
-    // Wysyłanie zaakceptowanych rekordów
     console.log('📤 Wysyłanie zaakceptowanych rekordów:', acceptedRecords);
     console.log('📊 Liczba rekordów:', acceptedRecords.length);
     console.log('📄 JSON:', JSON.stringify(acceptedRecords, null, 2));
 
-    // TODO: Tutaj będzie wywołanie HTTP request:
-    // this.fileUploadService.submitAcceptedRecords(acceptedRecords).subscribe(...)
-
-    // Po wysłaniu usuń zaakceptowane rekordy z listy
     const acceptedIndexes = Array.from(this.acceptedRows);
     this.records = this.records.filter(record => !this.acceptedRows.has(record.index));
     this.acceptedRows.clear();
     
-    // Zaktualizuj szkic - usuń zaakceptowane rekordy
     if (this.fileName) {
       this.fileUploadService.updateDraft(this.fileName, this.records, []);
     }
     
-    // Wyczyść localStorage z zaakceptowanych
     this.clearAcceptedFromStorage();
     this.filterAcceptedRecords();
 
-    // Jeśli wszystkie rekordy zostały wysłane, usuń szkic
     if (this.records.length === 0 && this.fileName) {
       this.fileUploadService.removeDraft(this.fileName);
     }
@@ -375,13 +332,10 @@ export class ImportVerificationComponent implements OnInit {
   }
 
   getVisibleRecords(): ImportRecord[] {
-    // Zwraca wszystkie rekordy - zaakceptowane też są widoczne
     const records = [...this.records];
     
-    // Zastosuj sortowanie jeśli jest ustawione
     if (this.sortField === 'compliance') {
       records.sort((a, b) => {
-        // Zaakceptowane rekordy zawsze na końcu (lub początku w zależności od kierunku)
         const aAccepted = this.acceptedRows.has(a.index);
         const bAccepted = this.acceptedRows.has(b.index);
         
@@ -392,7 +346,6 @@ export class ImportVerificationComponent implements OnInit {
           return this.sortDirection === 'asc' ? -1 : 1;
         }
         
-        // Jeśli oba są zaakceptowane lub oba nie są, sortuj po overall_score
         const aScore = a.overall_score || 0;
         const bScore = b.overall_score || 0;
         
@@ -409,26 +362,18 @@ export class ImportVerificationComponent implements OnInit {
     return records;
   }
   
-  /**
-   * Obsługuje sortowanie
-   */
   onSortChange(field: 'compliance'): void {
     if (this.sortField === field) {
-      // Zmień kierunek sortowania
       this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
     } else {
-      // Ustaw nowe pole i domyślnie rosnąco
       this.sortField = field;
       this.sortDirection = 'asc';
     }
   }
   
-  /**
-   * Pobiera ikonę sortowania
-   */
   getSortIcon(field: 'compliance'): string {
     if (this.sortField !== field) {
-      return '↓'; // Domyślna ikona
+      return '↓';
     }
     return this.sortDirection === 'asc' ? '↑' : '↓';
   }
@@ -504,6 +449,24 @@ export class ImportVerificationComponent implements OnInit {
 
   getFieldValue(record: ImportRecord, fieldName: string): string {
     return record.fields[fieldName]?.json_value || '';
+  }
+
+  /**
+   * Wyodrębnia nazwę przedmiotu
+   */
+  getItemName(record: ImportRecord): string {
+    const nameValue = this.getFieldValue(record, 'name');
+    if (!nameValue) return '-';
+    return nameValue;
+  }
+
+  /**
+   * Wyodrębnia kolor przedmiotu z osobnego pola itemColor
+   */
+  getItemColor(record: ImportRecord): string {
+    const colorValue = this.getFieldValue(record, 'itemColor');
+    if (!colorValue || colorValue === '-') return '-';
+    return colorValue;
   }
 
   getCompliancePercentage(score: number): number {
@@ -647,6 +610,14 @@ export class ImportVerificationComponent implements OnInit {
         highlightedText = highlightedText.replace(regex, (match) => {
           return `<mark class="import-verification__source-row-highlight">${match}</mark>`;
         });
+      });
+    } else if (fieldName === 'location') {
+      // Dla location - podświetlaj całą nazwę miejsca (może zawierać spacje, np. "Nowy Sącz")
+      // Najpierw spróbuj dopasować całą wartość
+      const escapedValue = this.escapeHtml(fieldValue);
+      const regex = new RegExp(this.escapeRegex(fieldValue), 'gi');
+      highlightedText = highlightedText.replace(regex, (match) => {
+        return `<mark class="import-verification__source-row-highlight">${match}</mark>`;
       });
     } else {
       // Dla innych pól - podziel na słowa

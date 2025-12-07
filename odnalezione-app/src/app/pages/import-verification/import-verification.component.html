@@ -39,7 +39,8 @@
       <thead>
         <tr>
           <th class="import-verification__th">ID</th>
-          <th class="import-verification__th">Rodzaj i kolor przedmiotu</th>
+          <th class="import-verification__th">Nazwa</th>
+          <th class="import-verification__th">Kolor</th>
           <th class="import-verification__th">Opis ogólny</th>
           <th class="import-verification__th">Data znalezienia</th>
           <th class="import-verification__th">Miejsce znalezienia</th>
@@ -74,7 +75,7 @@
         @for (record of getVisibleRecords(); track record.index; let pairIndex = $index) {
           <!-- Odstęp przed parą -->
           <tr class="import-verification__spacer">
-            <td [attr.colspan]="9"></td>
+            <td [attr.colspan]="10"></td>
           </tr>
           
           <!-- Pierwszy wiersz z danymi -->
@@ -97,9 +98,16 @@
               <div class="import-verification__item-type">
                 <div class="import-verification__item-type-label">Proponowany</div>
                 <div class="import-verification__item-type-value">
-                  {{ getFieldValue(record, 'name') }}
+                  {{ getItemName(record) }}
                 </div>
               </div>
+            </td>
+            <td 
+              class="import-verification__td"
+              (mouseenter)="onCellMouseEnter(record.index, 'name')"
+              (mouseleave)="onCellMouseLeave()"
+            >
+              {{ getItemColor(record) }}
             </td>
             <td 
               class="import-verification__td"
@@ -186,7 +194,7 @@
               [class.import-verification__row--pair-odd]="pairIndex % 2 === 1"
             > 
               <td class="import-verification__td" style="border-top: none;"></td>
-              <td class="import-verification__td" [attr.colspan]="7">
+              <td class="import-verification__td" [attr.colspan]="8">
                 <div class="">
                   <div class="import-verification__source-row-label">Oryginał</div>
                   <div 
