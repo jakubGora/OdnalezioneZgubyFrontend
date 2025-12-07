@@ -24,7 +24,10 @@ export class ImportVerificationComponent implements OnInit {
   records: ImportRecord[] = [];
   selectedRows: Set<number> = new Set();
   acceptedRows: Set<number> = new Set();
-  private readonly STORAGE_KEY = 'accepted_import_records';
+  
+  private getStorageKey(): string {
+    return `accepted_import_records_${this.fileName}`;
+  }
   
   sortField: 'compliance' | null = null;
   sortDirection: 'asc' | 'desc' = 'asc';
@@ -383,12 +386,11 @@ export class ImportVerificationComponent implements OnInit {
   }
 
   private saveAcceptedToStorage(): void {
-    const acceptedRecords = this.getAcceptedRecords();
     try {
-      localStorage.setItem(this.STORAGE_KEY, JSON.stringify(acceptedRecords));
-      // Zaktualizuj szkic w serwisie z listą zaakceptowanych indexów
+      const acceptedIndexes = Array.from(this.acceptedRows);
+      localStorage.setItem(this.getStorageKey(), JSON.stringify(acceptedIndexes));
+      
       if (this.fileName && this.records.length > 0) {
-        const acceptedIndexes = Array.from(this.acceptedRows);
         this.fileUploadService.updateDraft(this.fileName, this.records, acceptedIndexes);
       }
     } catch (error) {
@@ -398,12 +400,11 @@ export class ImportVerificationComponent implements OnInit {
 
   private loadAcceptedFromStorage(): void {
     try {
-      const stored = localStorage.getItem(this.STORAGE_KEY);
+      const stored = localStorage.getItem(this.getStorageKey());
       if (stored) {
-        const acceptedRecords: ImportRecord[] = JSON.parse(stored);
-        // Dodaj indexy zaakceptowanych rekordów do Set
-        acceptedRecords.forEach((record) => {
-          this.acceptedRows.add(record.index);
+        const acceptedIndexes: number[] = JSON.parse(stored);
+        acceptedIndexes.forEach((index) => {
+          this.acceptedRows.add(index);
         });
       }
     } catch (error) {
@@ -413,7 +414,7 @@ export class ImportVerificationComponent implements OnInit {
 
   private clearAcceptedFromStorage(): void {
     try {
-      localStorage.removeItem(this.STORAGE_KEY);
+      localStorage.removeItem(this.getStorageKey());
     } catch (error) {
       console.error('Błąd czyszczenia localStorage:', error);
     }
