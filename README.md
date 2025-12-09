@@ -1,5 +1,7 @@
 # Rejestr rzeczy znalezionych
 
+## Aplikacja napisana na HackNation 2025 w 24h :D 
+
 Aplikacja webowa do zarządzania rejestrem rzeczy znalezionych, zbudowana w Angular 20 z wykorzystaniem NX monorepo. Aplikacja umożliwia ręczne dodawanie przedmiotów, import plików CSV z automatyczną konwersją i walidacją danych przy użyciu AI, oraz przeglądanie i zarządzanie zapisanymi przedmiotami.
 
 # Demo: https://www.youtube.com/watch?v=KTjW4EjQPq0
